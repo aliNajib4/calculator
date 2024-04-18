@@ -1,17 +1,29 @@
-@use "variables" as *;
+@use "variables";
+
+$widthToggle: 1rem;
+
+@mixin btn(
+  $back-color,
+  $text-color,
+  $shadow-color,
+  $hoverColor,
+  $size,
+  $padding
+) {
+  background-color: $back-color;
+  color: $text-color;
+  box-shadow: 0px 4px $shadow-color;
+  font-size: $size;
+  padding: $padding;
+  &:hover {
+    background-color: $hoverColor;
+  }
+}
 
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-}
-
-#root {
-  width: 100vw;
-  height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
 }
 
 input[type="text"] {
@@ -22,6 +34,207 @@ input[type="text"] {
 }
 
 button {
-  background-color: white;
+  background-color: transparent;
   border: none;
+}
+
+#root > .main {
+  transition: 0.2s;
+  font-size: 32px;
+  font-family: "League Spartan", sans-serif;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--col-main-color);
+  .calculator {
+    display: flex;
+    flex-direction: column;
+    width: 375px;
+    justify-content: center;
+    height: 100%;
+    padding: 0 20px;
+    gap: 1.5rem;
+    header {
+      user-select: none;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+      .logo {
+        font-size: 3rem;
+        color: var(--col-title-text);
+      }
+      .theme {
+        display: flex;
+        align-items: end;
+        .text {
+          color: var(--col-title-text);
+          margin-right: 20px;
+          font-size: 0.8rem;
+        }
+        .themeType {
+          display: flex;
+          flex-direction: column;
+          justify-content: space-between;
+          .nums {
+            color: var(--col-title-text);
+            display: flex;
+            justify-content: space-evenly;
+            font-size: 0.8rem;
+            span {
+              counter-increment: a;
+              &::before {
+                content: counter(a);
+              }
+            }
+          }
+          .themes {
+            padding: 5px;
+            position: relative;
+            line-height: 0;
+            input[type="radio"] {
+              opacity: 0;
+              width: $widthToggle;
+              height: $widthToggle;
+              z-index: 2;
+              position: relative;
+            }
+            &::after {
+              z-index: 1;
+              content: "";
+              position: absolute;
+              top: 0;
+              left: 0;
+              width: 100%;
+              height: 100%;
+              border-radius: 10000px;
+              background-color: var(--col-toggle-background);
+            }
+            .themeNow {
+              width: $widthToggle;
+              height: $widthToggle;
+              border-radius: 50%;
+              background-color: var(--col-red-shadow);
+              position: absolute;
+              top: 5px;
+              transition: 0.3s;
+              z-index: 2;
+              cursor: pointer;
+              &:hover {
+                background-color: var(--col-key-equal);
+              }
+            }
+          }
+        }
+      }
+    }
+    .out {
+      position: relative;
+
+      input {
+        width: 100%;
+        font-size: 2.75rem;
+        padding: 1.5rem;
+        text-align: right;
+        font-family: "league spartan", sans-serif;
+        border-radius: 16px;
+        background-color: var(--col-screen);
+        color: var(--col-title-text);
+        box-shadow: 0px 0px 0px 1px var(--col-key-equal);
+      }
+      button {
+        position: absolute;
+        top: 20px;
+        left: 10px;
+        height: calc(100% - 40px);
+        font-size: 1.5rem;
+        padding: 0 10px;
+        background-color: var(--col-key-equal);
+        border-radius: 10px;
+        color: var(--col-screen-text);
+        font-weight: 700;
+        font-family: "League Spartan";
+        font-size: 32px;
+        transition: color 0.125s;
+        cursor: pointer;
+        box-shadow: 0 3px 0 0 var(--col-red-shadow);
+        &:hover {
+          background-color: var(--col-key-equal-hover);
+        }
+      }
+    }
+    main {
+      user-select: none;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      grid-template-rows: repeat(5, 1fr);
+      gap: 1rem;
+      background-color: var(--col-toggle-background);
+      padding: 1.5rem;
+      border-radius: 16px;
+      button {
+        border: none;
+        display: flex;
+        align-items: flex-end;
+        justify-content: center;
+        border-radius: 10px;
+        width: 100%;
+        height: 4rem;
+        transition: 0.125s;
+        &:focus {
+          outline: none;
+        }
+        font-family: "league spartan", sans-serif;
+        font-weight: bold;
+        @include btn(
+          var(--col-main-key),
+          var(--col-main-text),
+          var(--col-main-shadow),
+          var(--col-main-key-hover),
+          2.5rem,
+          0.5rem
+        );
+      }
+      .key-DEL,
+      .key-RESET {
+        align-items: center;
+        @include btn(
+          var(--col-key-dark-blue),
+          var(--col-screen-text),
+          var(--col-key-shadow),
+          var(--col-key-dark-blue-hover),
+          1.75rem,
+          0.5rem
+        );
+      }
+      .key-RESET {
+        align-items: center;
+        grid-column: span 2;
+      }
+      .key-EQUAL {
+        align-items: center;
+        @include btn(
+          var(--col-key-equal),
+          var(--col-screen-text),
+          var(--col-red-shadow),
+          var(--col-key-equal-hover),
+          1.75rem,
+          0.5rem
+        );
+        grid-column: span 2;
+      }
+      //@mixin btn($back-color, $text-color, $shadow-color, $size, $padding) {
+    }
+  }
+}
+.Theme-1 .themeNow {
+  left: 5px;
+}
+.Theme-2 .themeNow {
+  left: 20px;
+}
+.Theme-3 .themeNow {
+  left: 37.5px;
 }

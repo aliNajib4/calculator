@@ -1,13 +1,16 @@
-import { Fragment } from "react";
 import PropTypes from "prop-types";
 
-const KeyBad = ({ KEYS }) => {
+const KeyBad = ({ KEYS, handleKey }) => {
   return (
     <main>
       {KEYS.map((key) => (
-        <Fragment key={key}>
-          <button>{key}</button>
-        </Fragment>
+        <button
+          key={key}
+          className={"key-" + (key === "=" ? "EQUAL" : key)}
+          onClick={() => handleKey(key)}
+        >
+          {key === "*" ? "×" : key}
+        </button>
       ))}
     </main>
   );
@@ -15,6 +18,7 @@ const KeyBad = ({ KEYS }) => {
 
 KeyBad.propTypes = {
   KEYS: PropTypes.array.isRequired,
+  handleKey: PropTypes.func.isRequired,
 };
 
 export default KeyBad;
